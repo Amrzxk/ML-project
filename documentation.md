@@ -47,11 +47,51 @@ This document provides detailed information about the machine learning models im
 | **Feature Matrix Dimension** | (662, 241) raw → (662, 241) after StandardScaler |
 | **Scaling** | StandardScaler (zero mean, unit variance) |
 
-**Sample Feature Names (first 25):**
-- ACCESS_ALL_DOWNLOADS, ACCESS_CACHE_FILESYSTEM, ACCESS_CHECKIN_PROPERTIES, ACCESS_COARSE_LOCATION, ACCESS_COARSE_UPDATES, ACCESS_FINE_LOCATION, ACCESS_LOCATION_EXTRA_COMMANDS, ACCESS_MOCK_LOCATION, ACCESS_MTK_MMHW, ACCESS_NETWORK_STATE, ACCESS_PROVIDER, ACCESS_SERVICE, ACCESS_SHARED_DATA, ACCESS_SUPERUSER, ACCESS_SURFACE_FLINGER, ACCESS_WIFI_STATE, activityCalled, ACTIVITY_RECOGNITION, ACCOUNT_MANAGER, ADD_VOICEMAIL, ANT, ANT_ADMIN, AUTHENTICATE_ACCOUNTS, AUTORUN_MANAGER_LICENSE_MANAGER, AUTORUN_MANAGER_LICENSE_SERVICE
+<details>
+<summary><strong>Sample Feature Names (first 25)</strong></summary>
 
-**Sample Feature Names (last 5):**
-- Landroid/telephony/TelephonyManager;->getSimOperator, Landroid/telephony/TelephonyManager;->getSimOperatorName, Landroid/telephony/TelephonyManager;->getSimCountryIso, Landroid/telephony/TelephonyManager;->getSimSerialNumber, Lorg/apache/http/impl/client/DefaultHttpClient;->execute
+```
+ACCESS_ALL_DOWNLOADS
+ACCESS_CACHE_FILESYSTEM
+ACCESS_CHECKIN_PROPERTIES
+ACCESS_COARSE_LOCATION
+ACCESS_COARSE_UPDATES
+ACCESS_FINE_LOCATION
+ACCESS_LOCATION_EXTRA_COMMANDS
+ACCESS_MOCK_LOCATION
+ACCESS_MTK_MMHW
+ACCESS_NETWORK_STATE
+ACCESS_PROVIDER
+ACCESS_SERVICE
+ACCESS_SHARED_DATA
+ACCESS_SUPERUSER
+ACCESS_SURFACE_FLINGER
+ACCESS_WIFI_STATE
+activityCalled
+ACTIVITY_RECOGNITION
+ACCOUNT_MANAGER
+ADD_VOICEMAIL
+ANT
+ANT_ADMIN
+AUTHENTICATE_ACCOUNTS
+AUTORUN_MANAGER_LICENSE_MANAGER
+AUTORUN_MANAGER_LICENSE_SERVICE
+```
+
+</details>
+
+<details>
+<summary><strong>Sample Feature Names (last 5)</strong></summary>
+
+```
+Landroid/telephony/TelephonyManager;->getSimOperator
+Landroid/telephony/TelephonyManager;->getSimOperatorName
+Landroid/telephony/TelephonyManager;->getSimCountryIso
+Landroid/telephony/TelephonyManager;->getSimSerialNumber
+Lorg/apache/http/impl/client/DefaultHttpClient;->execute
+```
+
+</details>
 
 ---
 
