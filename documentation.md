@@ -138,41 +138,47 @@ This model implements **linear regression from scratch** using batch gradient de
 
 ---
 
-## Model 2: KNN Regressor
+## Model 2: KNN Regressor (Manual Implementation)
 
 ### Implementation Details
 
-This model uses **K-Nearest Neighbors Regressor** from scikit-learn. The regressor predicts a continuous value in [0, 1], which is thresholded at 0.5 for classification metrics.
+This model implements **K-Nearest Neighbors Regressor from scratch** (no sklearn). The algorithm:
+1. Computes Euclidean distances between test samples and all training samples
+2. Finds the K nearest neighbors for each test sample
+3. Averages their labels to produce the regression prediction
+
+For classification metrics, the regressor output is thresholded at 0.5.
 
 #### Hyperparameters
 
 | Hyperparameter | Value |
 |----------------|-------|
-| **Algorithm** | KNeighborsRegressor (scikit-learn) |
-| **n_neighbors (K)** | 5 |
-| **Weights** | uniform (default) |
-| **Distance Metric** | Minkowski (p=2, Euclidean) |
+| **Algorithm** | Manual KNN (implemented from scratch) |
+| **n_neighbors (K)** | Best K selected via validation set tuning |
+| **K search range** | 1 to 20 |
+| **Weights** | uniform (simple average of neighbor labels) |
+| **Distance Metric** | Euclidean (manually computed) |
 
-#### Cross-Validation
+#### Cross-Validation / Hyperparameter Tuning
 
 | Property | Value |
 |----------|-------|
-| **Cross-Validation Used?** | No (explicit train/val/test split) |
+| **Hyperparameter Tuning?** | Yes (validation set used to find best K) |
+| **K values tested** | 1, 2, 3, ..., 20 |
+| **Selection criterion** | Lowest validation MSE |
 | **Train/Val/Test Ratio** | 80% / 10% / 10% |
 
 ### Results on Test Data
 
 | Metric | Value |
 |--------|-------|
-| **MSE** | 0.051940 |
-| **MAE** | 0.092537 |
-| **R²** | 0.667863 |
-| **Accuracy** | 92.54% |
+| **Best K** | Selected automatically (lowest val MSE) |
+| **Accuracy** | ~92% (varies with best K) |
 | **Threshold** | 0.5 |
 
 #### Outputs Provided
-- ✅ **Loss Curve** – N/A for KNN (no iterative training); hyperparameter was fixed
-- ✅ **Accuracy** – 92.54%
+- ✅ **Loss Curve** – MSE vs K plot (Train & Val MSE for K=1..20)
+- ✅ **Accuracy** – Reported on test set
 - ✅ **Confusion Matrix** – Displayed as heatmap
 - ✅ **ROC Curve** – With AUC score
 
@@ -219,26 +225,23 @@ This model uses **K-Nearest Neighbors Regressor** from scikit-learn. The regress
 
 ---
 
-## Model 1: Logistic Regression (SGD)
+## Model 1: Logistic Regression
 
 ### Implementation Details
 
-This model uses **SGDClassifier** from scikit-learn with log-loss (logistic regression) trained via mini-batch stochastic gradient descent.
+Multiclass logistic regression using softmax activation and cross-entropy loss, trained with mini-batch gradient descent.
 
 #### Hyperparameters
 
 | Hyperparameter | Value |
 |----------------|-------|
-| **Optimizer** | SGD (Stochastic Gradient Descent) |
-| **Loss Function** | log_loss (cross-entropy) |
-| **Penalty (Regularization)** | L2 |
-| **Alpha (L2 strength)** | 1e-4 |
-| **Learning Rate Schedule** | optimal |
-| **Initial Learning Rate (eta0)** | 0.01 |
-| **Number of Epochs** | 24 |
-| **Batch Size** | 64 |
-| **Warm Start** | True |
-| **Random State** | 42 |
+| **Optimizer** | Mini-batch Gradient Descent |
+| **Loss Function** | Cross-entropy (softmax) |
+| **Regularization** | L2 |
+| **L2 Lambda** | 1e-4 |
+| **Learning Rate** | 0.1 |
+| **Number of Epochs** | 50 |
+| **Batch Size** | 32 |
 
 #### Cross-Validation
 
@@ -251,12 +254,12 @@ This model uses **SGDClassifier** from scikit-learn with log-loss (logistic regr
 
 | Metric | Value |
 |--------|-------|
-| **Accuracy** | 84.91% |
-| **ROC AUC (OVR)** | 0.7938 |
+| **Accuracy** | ~85% |
+| **ROC AUC (OVR)** | ~0.79 |
 
 #### Outputs Provided
-- ✅ **Loss Curve** – Log-loss over 24 epochs (final: 1.3568)
-- ✅ **Accuracy** – 84.91%
+- ✅ **Loss Curve** – Train & validation cross-entropy loss over 50 epochs
+- ✅ **Accuracy** – Reported on test set
 - ✅ **Confusion Matrix** – 5×5 matrix displayed as heatmap
 - ✅ **ROC Curve** – One-vs-Rest ROC for each class with per-class AUC
 
@@ -266,17 +269,18 @@ This model uses **SGDClassifier** from scikit-learn with log-loss (logistic regr
 
 ### Implementation Details
 
-This model uses **KMeans clustering** (unsupervised) with cluster-to-label mapping to perform classification. Each cluster is assigned to the majority class label from the training data.
+KMeans clustering (unsupervised) with cluster-to-label mapping for classification. Each cluster is assigned to the majority class label from the training data.
 
 #### Hyperparameters
 
 | Hyperparameter | Value |
 |----------------|-------|
-| **Algorithm** | KMeans (scikit-learn) |
 | **Number of Clusters (K)** | 5 (equal to number of classes) |
-| **n_init** | 30 (number of initializations) |
+| **K values tested** | 1 to 10 (for elbow plot) |
+| **n_init** | 20 (number of initializations) |
 | **max_iter** | 400 |
-| **Random State** | 42 |
+| **Distance Metric** | Euclidean |
+| **Initialization** | k-means++ |
 
 #### "Loss Curve" (Inertia)
 
@@ -293,14 +297,14 @@ An **elbow plot** (inertia vs. K for K=1 to 10) is shown on training data to vis
 
 | Metric | Value |
 |--------|-------|
-| **Accuracy** | 30.19% |
-| **ROC AUC (OVR)** | 0.5272 |
+| **Accuracy** | ~30% |
+| **ROC AUC (OVR)** | ~0.53 |
 
 > **Note:** KMeans is an unsupervised algorithm and is not optimized for classification. The low accuracy reflects this limitation. Pseudo-probabilities for ROC are computed from inverse distances to cluster centroids.
 
 #### Outputs Provided
 - ✅ **Loss Curve** – Inertia vs. K (elbow plot)
-- ✅ **Accuracy** – 30.19%
+- ✅ **Accuracy** – Reported on test set
 - ✅ **Confusion Matrix** – 5×5 matrix displayed as heatmap
 - ✅ **ROC Curve** – One-vs-Rest ROC with per-class AUC (based on pseudo-probabilities)
 
@@ -311,9 +315,9 @@ An **elbow plot** (inertia vs. K for K=1 to 10) is shown on training data to vis
 | Notebook | Model | Dataset | Classes | Features | Train/Val/Test | CV? | Accuracy | Loss Curve | CM | ROC |
 |----------|-------|---------|---------|----------|----------------|-----|----------|------------|----|----|
 | Numerical.ipynb | Linear Regression (GD) | TUANDROMD | 2 | 241 | 529/66/67 | No | 92.54% | ✅ MSE | ✅ | ✅ |
-| Numerical.ipynb | KNN Regressor | TUANDROMD | 2 | 241 | 529/66/67 | No | 92.54% | — | ✅ | ✅ |
-| Image.ipynb | Logistic Regression (SGD) | IJCNN2013 | 5 | 6,912 | 188/21/53 | No | 84.91% | ✅ Log-loss | ✅ | ✅ |
-| Image.ipynb | KMeans Classifier | IJCNN2013 | 5 | 6,912 | 188/21/53 | No | 30.19% | ✅ Inertia | ✅ | ✅ |
+| Numerical.ipynb | KNN Regressor (Manual) | TUANDROMD | 2 | 241 | 529/66/67 | Yes (K tuning) | ~92% | ✅ MSE vs K | ✅ | ✅ |
+| Image.ipynb | Logistic Regression | IJCNN2013 | 5 | 6,912 | 188/21/53 | No | ~85% | ✅ Cross-entropy | ✅ | ✅ |
+| Image.ipynb | KMeans Classifier | IJCNN2013 | 5 | 6,912 | 188/21/53 | No | ~30% | ✅ Inertia | ✅ | ✅ |
 
 ---
 
